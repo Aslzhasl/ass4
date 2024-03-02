@@ -2,6 +2,7 @@ const express =require('express');
 const path=require("path");
 const bcrypt=require("bcrypt");
 const collection=require("./confid");
+const {authCourse,authPage}=require('./middleware');
 /*
 const exp = require('constants');
 */
@@ -10,10 +11,16 @@ const app=express();
 app.use(express.json());
 
 app.use(express.urlencoded({extended:false}));
+//admin code
+
+/*
+app.get("/pages/admin.ejs",authPage(["teacher","admin"]),(req,res)=>{
+res.send("You have permission")
+});
+*/
 
 
-
-
+//for ejs
 app.set('view engine','ejs');
 
 
@@ -62,7 +69,7 @@ try{
     }
     const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
     if(isPasswordMatch){
-        res.render("home");
+        res.render("pages/home.ejs");
     }else{
         req.send("wrond password");
     }
